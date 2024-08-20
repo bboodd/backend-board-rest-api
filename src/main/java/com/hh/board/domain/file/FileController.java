@@ -7,10 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @Slf4j
 @RequestMapping("/api-board")
 public class FileController {
+
+    private final FileService fileService;
 
     @GetMapping("/posts/{postId}/files")
     public void getFiles(@PathVariable int postId){

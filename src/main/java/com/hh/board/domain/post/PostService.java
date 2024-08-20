@@ -1,6 +1,7 @@
 package com.hh.board.domain.post;
 
 import com.hh.board.common.dto.SearchDto;
+import com.hh.board.common.exception.PostNotFoundException;
 import com.hh.board.common.paging.Pagination;
 import com.hh.board.common.paging.PagingResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.hh.board.common.vo.SearchVo.toVo;
+import static com.hh.board.domain.post.PostResponseDto.toDto;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -69,7 +71,11 @@ public class PostService {
      */
 
     public PostResponseDto findPostById(int postId){
-        PostResponseDto result = PostResponseDto.toDto(postMapper.findPostById(postId));
+        PostVo postVo = postMapper.findPostById(postId);
+        if(postVo == null){
+            throw new PostNotFoundException();
+        }
+        PostResponseDto result = toDto(postVo);
         return result;
     }
 

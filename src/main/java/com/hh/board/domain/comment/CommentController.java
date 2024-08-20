@@ -7,10 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @Slf4j
 @RequestMapping("/api-board")
 public class CommentController {
+
+    private final CommentService commentService;
 
     @GetMapping("/posts/{postId}/comments")
     public void getComments(@PathVariable int postId){
