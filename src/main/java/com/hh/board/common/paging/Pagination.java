@@ -20,6 +20,7 @@ public class Pagination {
         if(totalRecordCount > 0) {
             this.totalRecordCount = totalRecordCount;
             calculation(searchDto);
+            searchDto.setPagination(this);
         }
     }
 
