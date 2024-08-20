@@ -2,6 +2,7 @@ package com.hh.board.aop;
 
 import com.hh.board.common.exception.PostNotFoundException;
 import com.hh.board.common.response.ErrorResponse;
+import com.hh.board.common.response.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,10 +17,11 @@ public class ExceptionAdvice {
      * @return 404
      */
     @ExceptionHandler(PostNotFoundException.class)
-    public ResponseEntity<?> postNotFoundException(){
+    public ResponseEntity<Response> postNotFoundException(){
+        String message = "게시글을 찾을 수 없습니다.";
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse("게시글을 찾을 수 없습니다."));
+                .body(Response.error(404, message));
     }
 
     /**
@@ -30,10 +32,10 @@ public class ExceptionAdvice {
      * @return 400
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> methodArgumentNotValidException(MethodArgumentNotValidException e){
+    public ResponseEntity<Response> methodArgumentNotValidException(MethodArgumentNotValidException e){
         String message = e.getBindingResult().getFieldError().getDefaultMessage();
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse(message));
+                .body(Response.error(400, message));
     }
 }

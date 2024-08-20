@@ -1,6 +1,9 @@
 package com.hh.board.domain.post;
 
 
+import com.hh.board.common.dto.SearchDto;
+import com.hh.board.common.paging.PagingResponse;
+import com.hh.board.common.response.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,18 +20,23 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/posts")
-    public void getPosts(){
+    public ResponseEntity<Response> getPosts(SearchDto searchDto){
 
+        PagingResponse<PostResponseDto> listWithPagination = postService.findAllPostBySearch(searchDto);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Response.success(listWithPagination));
     }
 
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<PostResponseDto> getPost(@PathVariable int postId){
+    public ResponseEntity<Response> getPost(@PathVariable int postId){
 
         PostResponseDto postResponseDto = postService.findPostById(postId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(postResponseDto);
+                .body(Response.success(postResponseDto));
     }
 
     @PostMapping("/posts")
