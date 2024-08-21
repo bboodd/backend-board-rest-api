@@ -3,16 +3,13 @@ package com.hh.board.domain.file;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
-import static com.hh.board.domain.file.FileDto.toDto;
+import static com.hh.board.domain.file.FileResponseDto.toDto;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -22,92 +19,95 @@ public class FileService {
 
     private final FileMapper fileMapper;
 
-    @Value("${filePath}")
-    String filePath;
-
     /**
-     * 파일 업로드
-     * multipartfile 받아서 fileVo로 변환후 save
-     * @param postId
-     * @param file
-     * @return
-     * @throws IOException
+     * 파일 다중 등록
+     * @param postId - 게시글 번호
+     * @param files - 파일 정보 list
      */
+    @Transactional
+    public void saveFiles(int postId, List<FileRequestDto> files) {
+        if(CollectionUtils.isEmpty(files)) {
+            return;
+        }
+        for(FileRequestDto file : files) {
+            file.setPostId(postId);
+        }
+        List<FileVo> fileVoList = files.stream()
+                .map(FileVo::toVo).collect(toList());
 
-    public int uploadAndSaveFile(int postId, MultipartFile file) throws IOException {
-
-        String originalName = file.getOriginalFilename();
-
-        String uuid = UUID.randomUUID().toString();
-
-        String extension = originalName.substring(originalName.lastIndexOf("."));
-
-        String saveName = uuid + extension;
-
-        String savePath = filePath + saveName;
-
-        long fileSize = file.getSize();
-
-        FileVo fileVo = FileVo.builder()
-                .postId(postId)
-                .fileOriginalName(originalName)
-                .fileName(saveName)
-                .filePath(filePath)
-                .fileSize(fileSize)
-                .build();
-
-        file.transferTo(new File(savePath));
-
-        int result = saveFile(fileVo);
-
-        return result;
+        fileMapper.saveAllFile(fileVoList);
     }
 
     /**
      * 파일 등록
-     * @param fileVo
-     * @return
+     * @param fileVo 파일 정보
+     * @return 성공시 1 실패시 0
      */
 
-    public int saveFile(FileVo fileVo){
+    public int saveFile(FileVo fileVo) {
         int result = fileMapper.saveFile(fileVo);
         return result;
     }
 
     /**
      * 파일 목록 조회
-     * @param postId
-     * @return
+     * @param postId - 게시글 번호
+     * @return 파일 상세정보 list
      */
 
-    public List<FileDto> findAllFileByPostId(int postId){
+    public List<FileResponseDto> findAllFileByPostId(int postId) {
         List<FileVo> fileList = fileMapper.findAllFileByPostId(postId);
 
-        List<FileDto> result = fileList.stream()
-                .map(FileDto::toDto).collect(toList());
+        List<FileResponseDto> result = fileList.stream()
+                .map(FileResponseDto::toDto).collect(toList());
         return result;
     }
 
     /**
-     * 파일 단건 조회
-     * @param fileId
-     * @return
+     * 파일 상세정보 조회
+     * @param fileId - id
+     * @return - 파일 상세정보
      */
 
-    public FileDto findFileById(int fileId){
+    public FileResponseDto findFileById(int fileId) {
         FileVo fileVo = fileMapper.findFileById(fileId);
-        FileDto result = toDto(fileVo);
+        FileResponseDto result = toDto(fileVo);
         return result;
     }
 
     /**
      * 파일 삭제
-     * @param fileId
-     * @return
+     * @param fileId - id
+     * @return - 성공시 1 실패시 0
      */
 
-    public int deleteFile(int fileId){
+    public int deleteFile(int fileId) {
         int result = fileMapper.deleteFileById(fileId);
         return result;
+    }
+
+    /**
+     * 파일 리스트 조회
+     * @param ids - pk list
+     * @return - file list
+     */
+    public List<FileResponseDto> findAllFileByIds(List<Integer> ids) {
+        if(CollectionUtils.isEmpty(ids)) {
+            return Collections.emptyList();
+        }
+        List<FileVo> fileVoList = fileMapper.findAllFileByIds(ids);
+        return fileVoList.stream().map(FileResponseDto::toDto).collect(toList());
+    }
+
+
+    /**
+     * 파일 삭제
+     * @param ids - id list
+     */
+    public void deleteAllFileByIds(List<Integer> ids){
+        if(CollectionUtils.isEmpty(ids)) {
+            return;
+        }
+        fileMapper.deleteAllFileByIds(ids);
     }
 }

@@ -6,7 +6,7 @@
 
     <!--    category 테이블 전체 컬럼   -->
     <sql id="categoryColumns">
-        category_id
+          category_id
         , category_name
     </sql>
 

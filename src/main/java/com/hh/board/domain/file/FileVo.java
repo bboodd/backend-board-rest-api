@@ -23,16 +23,16 @@ public class FileVo {
     /**
      * dto를 vo로 전환
      * db로 들어감(업로드)
-     * @param fileDto
-     * @return fileVo
+     * @param fileRequestDto - dto
+     * @return fileVo - vo
      */
 
-    public static FileVo toVo(FileDto fileDto){
+    public static FileVo toVo(FileRequestDto fileRequestDto) {
         FileVo fileVo = FileVo.builder()
-                .fileOriginalName(fileDto.getFileOriginalName())
-                .fileName(fileDto.getFileName())
-                .filePath(fileDto.getFilePath())
-                .fileSize(fileDto.getFileSize())
+                .fileOriginalName(fileRequestDto.getFileOriginalName())
+                .fileName(fileRequestDto.getFileName())
+                .filePath(fileRequestDto.getFilePath())
+                .fileSize(fileRequestDto.getFileSize())
                 .build();
         return fileVo;
     }

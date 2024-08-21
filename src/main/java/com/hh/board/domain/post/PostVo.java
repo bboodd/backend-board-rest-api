@@ -31,11 +31,11 @@ public class PostVo {
     /**
      * dto를 vo로 변환
      * 화면에서 받아서 db로 넣을때
-     * @param postRequestDto
-     * @return postVo
+     * @param postRequestDto - dto
+     * @return postVo - vo
      */
 
-    public static PostVo toVo(PostRequestDto postRequestDto){
+    public static PostVo toVo(PostRequestDto postRequestDto) {
         PostVo postVo = PostVo.builder()
                 .postId(postRequestDto.getPostId())
                 .categoryId(postRequestDto.getCategoryId())

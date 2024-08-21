@@ -9,6 +9,5 @@ import lombok.*;
 public class CategoryVo {
 
     private int categoryId;
-
     private String categoryName;
 }

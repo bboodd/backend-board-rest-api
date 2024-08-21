@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SearchDto {
 
+    // TODO: 검색조건 유효성검사
     private String startDate = "";
     private String endDate = "";
     private int categoryId = 0;
