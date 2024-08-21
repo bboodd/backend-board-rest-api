@@ -1,6 +1,7 @@
 package com.hh.board.domain.file;
 
 
+import com.hh.board.common.exception.FileNotFoundException;
 import com.hh.board.common.file.FileUtils;
 import com.hh.board.common.response.Response;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -28,14 +30,17 @@ public class FileController {
     @GetMapping("/posts/{postId}/files")
     public ResponseEntity<Response> getFiles(@PathVariable int postId) {
 
+        List<FileResponseDto> fileList = fileService.findAllFileByPostId(postId);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(Response.success(fileService.findAllFileByPostId(postId)));
+                .body(Response.success(fileList));
     }
 
     // 첨부파일 다운로드
     @GetMapping("/posts/{postId}/files/{fileId}/download")
     public ResponseEntity<Resource> downloadFile(@PathVariable int postId, @PathVariable int fileId) {
+
         FileResponseDto file = fileService.findFileById(fileId);
         Resource resource = fileUtils.readFileAsResource(file);
         try {
@@ -47,7 +52,7 @@ public class FileController {
                     .header(HttpHeaders.CONTENT_LENGTH, file.getFileSize() + "")
                     .body(resource);
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("fileName encoding failed : " + file.getFileOriginalName());
+            throw new FileNotFoundException("fileName encoding failed : " + file.getFileOriginalName());
         }
     }
 }
