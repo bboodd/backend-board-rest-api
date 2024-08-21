@@ -20,13 +20,12 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 @RequiredArgsConstructor
 public class PostService {
-    //TODO:받을때 dto안됨
 
     private final PostMapper postMapper;
 
     /**
      * 게시글 등록
-     * @param postVo
+     * @param postVo - 저장할 정보
      * @return 등록된 postId
      */
 
@@ -40,7 +39,7 @@ public class PostService {
 
     /**
      * 검색 게시글 목록 조회
-     * @param searchDto
+     * @param searchDto - 검색조건
      * @return 페이징 객체
      */
 
@@ -66,7 +65,7 @@ public class PostService {
 
     /**
      * 게시글 단건 조회
-     * @param postId
+     * @param postId - id
      * @return 게시글 반환dto
      */
 
@@ -81,7 +80,7 @@ public class PostService {
 
     /**
      * 게시글 비밀번호 찾기
-     * @param postId
+     * @param postId - id
      * @return 비밀번호
      */
 
@@ -92,7 +91,7 @@ public class PostService {
 
     /**
      * 조회수 1 증가
-     * @param postId
+     * @param postId - id
      * @return 성공시 1 실패시 0
      */
 
@@ -103,7 +102,7 @@ public class PostService {
 
     /**
      * 게시글 삭제
-     * @param postId
+     * @param postId - id
      * @return 성공시 1 실패시 0
      */
 
@@ -114,7 +113,7 @@ public class PostService {
 
     /**
      * 게시글 업데이트
-     * @param postVo
+     * @param postVo - 업데이트 정보
      * @return 성공시 1 실패시 0
      */
 

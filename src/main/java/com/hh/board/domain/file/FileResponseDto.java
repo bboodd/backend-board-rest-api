@@ -1,6 +1,5 @@
 package com.hh.board.domain.file;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,20 +9,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(force = true)
 @Data
 @Builder
-public class FileDto {
+public class FileResponseDto {
 
-    int fileId;
+    private int fileId;
 
-    @NotBlank(message = "fileDto에 postId값이 들어오지 않았습니다")
-    int postId;
+    private int postId;
 
-    String fileOriginalName;
+    private String fileOriginalName;
 
-    String fileName;
+    private String fileName;
 
-    String filePath;
+    private String filePath;
 
-    long fileSize;
+    private long fileSize;
+
+    private int status;
+
 
     /**
      * vo객체를 dto객체로
@@ -32,14 +33,14 @@ public class FileDto {
      * @return fileDto
      */
 
-    public static FileDto toDto(FileVo fileVo){
-        FileDto fileDto = FileDto.builder()
+    public static FileResponseDto toDto(FileVo fileVo){
+        FileResponseDto fileResponseDto = FileResponseDto.builder()
                 .fileId(fileVo.getFileId())
                 .postId(fileVo.getPostId())
                 .fileName(fileVo.getFileName())
                 .fileOriginalName(fileVo.getFileOriginalName())
                 .filePath(fileVo.getFilePath())
                 .build();
-        return fileDto;
+        return fileResponseDto;
     }
 }

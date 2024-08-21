@@ -46,6 +46,7 @@ public class SearchVo {
         return searchVo;
     }
 
+
     public int getOffset() {        //시작
         return (page - 1) * recordSize;
     }

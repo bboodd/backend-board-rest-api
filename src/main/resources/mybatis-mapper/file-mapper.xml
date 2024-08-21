@@ -6,7 +6,7 @@
 
     <!--    file 테이블 전체 컬럼   -->
     <sql id="fileColumns">
-        file_id
+          file_id
         , post_id
         , file_original_name
         , file_name
@@ -40,6 +40,8 @@
         WHERE
             post_id = ${postId}
             AND status = 1
+        ORDER BY
+            file_id ASC
     </select>
 
     <!--    파일 id에 해당하는 파일 가져오기  -->
@@ -63,7 +65,52 @@
             file_id = #{fileId}
     </update>
 
+<!--    파일 리스트 저장   -->
+    <insert id="saveAllFile" parameterType="list">
+        INSERT INTO file (
+            <include refid="fileColumns"></include>
+        ) VALUES
+        <foreach collection="list" item="file" separator=",">
+        (
+              #{fileId}
+            , #{postId}
+            , #{fileOriginalName}
+            , #{fileName}
+            , #{filePath}
+            , #{fileSize}
+            , 1
+        )
+        </foreach>
+    </insert>
 
+<!--    파일 리스트 조회   -->
+    <select id="findAllFileByIds" parameterType="list" resultType="com.hh.board.domain.file.FileVo">
+        SELECT
+            <include refid="fileColumns"></include>
+        FROM
+            file
+        WHERE
+            status = 1
+            AND file_id IN
+            <foreach collection="list" item="fileId" open="(" separator="," close=")">
+                #{fileId}
+            </foreach>
+        ORDER BY
+            file_id ASC
+    </select>
+
+<!--    파일 삭제   -->
+    <delete id="deleteAllFileByIds" parameterType="list">
+        UPDATE
+            file
+        SET
+            status = 0
+        WHERE
+            file_id IN
+            <foreach collection="list" item="fileId" open="(" separator="," close=")">
+                #{fileId}
+            </foreach>
+    </delete>
 
 
 </mapper>

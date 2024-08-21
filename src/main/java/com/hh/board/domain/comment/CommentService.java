@@ -19,7 +19,7 @@ public class CommentService {
 
     /**
      * 댓글 등록 후 id 반환
-     * @param commentVo
+     * @param commentVo - 댓글 정보
      * @return commentId
      */
 
@@ -32,7 +32,7 @@ public class CommentService {
 
     /**
      * 댓글 id로 댓글 찾기
-     * @param commentId
+     * @param commentId - id
      * @return responseDto
      */
 
@@ -43,8 +43,8 @@ public class CommentService {
 
     /**
      * 댓글 업데이트
-     * @param commentVo
-     * @return commentId
+     * @param commentVo - 업데이트할 댓글 정보
+     * @return id
      */
 
     public int updateComment(CommentVo commentVo) {
@@ -54,8 +54,8 @@ public class CommentService {
 
     /**
      * 댓글 삭제
-     * @param commentId
-     * @return
+     * @param commentId - id
+     * @return 실패시 0 성공시 1
      */
 
     @Transactional
@@ -66,8 +66,8 @@ public class CommentService {
 
     /**
      * 댓글 목록 조회
-     * @param postId
-     * @return
+     * @param postId - 게시글 id
+     * @return - 댓글 정보 list
      */
 
     public List<CommentResponseDto> findAllCommentByPostId(int postId){

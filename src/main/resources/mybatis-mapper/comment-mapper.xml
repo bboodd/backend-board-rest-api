@@ -6,7 +6,7 @@
 
     <!--    comment 테이블 전체 컬럼   -->
     <sql id="commentColumns">
-        comment_id
+          comment_id
         , post_id
         , content
         , create_date
