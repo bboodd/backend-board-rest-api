@@ -23,11 +23,11 @@ public class FileVo {
     /**
      * dto를 vo로 전환
      * db로 들어감(업로드)
-     * @param fileRequestDto
-     * @return fileVo
+     * @param fileRequestDto - dto
+     * @return fileVo - vo
      */
 
-    public static FileVo toVo(FileRequestDto fileRequestDto){
+    public static FileVo toVo(FileRequestDto fileRequestDto) {
         FileVo fileVo = FileVo.builder()
                 .fileOriginalName(fileRequestDto.getFileOriginalName())
                 .fileName(fileRequestDto.getFileName())

@@ -17,11 +17,11 @@ public class CommentResponseDto {
     /**
      * vo객체를 dto객체로
      * 다운로드용 화면에 뿌려주기 위함
-     * @param commentVo
-     * @return responseDto
+     * @param commentVo - vo
+     * @return responseDto - dto
      */
 
-    public static CommentResponseDto toDto(CommentVo commentVo){
+    public static CommentResponseDto toDto(CommentVo commentVo) {
         CommentResponseDto commentResponseDto = CommentResponseDto.builder()
                 .commentId(commentVo.getCommentId())
                 .postId(commentVo.getPostId())

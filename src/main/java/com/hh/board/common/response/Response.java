@@ -14,7 +14,7 @@ public class Response {
 
     /**
      * 데이터가 없이 성공 반환 해주는 경우
-     * @return
+     * @return - Response
      */
     public static Response success() {
         return new Response(true, 0, null);
@@ -22,14 +22,20 @@ public class Response {
 
     /**
      * 데이터를 포함해서 성공 반환 해주는 경우
-     * @param data
-     * @return
-     * @param <T>
+     * @param data - data
+     * @return - Response
+     * @param <T> - general
      */
     public static <T> Response success(T data) {
         return new Response(true, 0, new Success<>(data));
     }
 
+    /**
+     * 에러 발생시 메세지 반환
+     * @param code - 에러코드
+     * @param message - 메세지
+     * @return - Response
+     */
     public static Response error(int code, String message) {
         return new Response(false, code, new Error(message));
     }

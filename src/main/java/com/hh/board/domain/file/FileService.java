@@ -25,11 +25,11 @@ public class FileService {
      * @param files - 파일 정보 list
      */
     @Transactional
-    public void saveFiles(int postId, List<FileRequestDto> files){
+    public void saveFiles(int postId, List<FileRequestDto> files) {
         if(CollectionUtils.isEmpty(files)) {
             return;
         }
-        for(FileRequestDto file : files){
+        for(FileRequestDto file : files) {
             file.setPostId(postId);
         }
         List<FileVo> fileVoList = files.stream()
@@ -44,7 +44,7 @@ public class FileService {
      * @return 성공시 1 실패시 0
      */
 
-    public int saveFile(FileVo fileVo){
+    public int saveFile(FileVo fileVo) {
         int result = fileMapper.saveFile(fileVo);
         return result;
     }
@@ -55,7 +55,7 @@ public class FileService {
      * @return 파일 상세정보 list
      */
 
-    public List<FileResponseDto> findAllFileByPostId(int postId){
+    public List<FileResponseDto> findAllFileByPostId(int postId) {
         List<FileVo> fileList = fileMapper.findAllFileByPostId(postId);
 
         List<FileResponseDto> result = fileList.stream()
@@ -69,7 +69,7 @@ public class FileService {
      * @return - 파일 상세정보
      */
 
-    public FileResponseDto findFileById(int fileId){
+    public FileResponseDto findFileById(int fileId) {
         FileVo fileVo = fileMapper.findFileById(fileId);
         FileResponseDto result = toDto(fileVo);
         return result;
@@ -81,7 +81,7 @@ public class FileService {
      * @return - 성공시 1 실패시 0
      */
 
-    public int deleteFile(int fileId){
+    public int deleteFile(int fileId) {
         int result = fileMapper.deleteFileById(fileId);
         return result;
     }
@@ -91,7 +91,7 @@ public class FileService {
      * @param ids - pk list
      * @return - file list
      */
-    public List<FileResponseDto> findAllFileByIds(List<Integer> ids){
+    public List<FileResponseDto> findAllFileByIds(List<Integer> ids) {
         if(CollectionUtils.isEmpty(ids)) {
             return Collections.emptyList();
         }
@@ -105,7 +105,7 @@ public class FileService {
      * @param ids - id list
      */
     public void deleteAllFileByIds(List<Integer> ids){
-        if(CollectionUtils.isEmpty(ids)){
+        if(CollectionUtils.isEmpty(ids)) {
             return;
         }
         fileMapper.deleteAllFileByIds(ids);

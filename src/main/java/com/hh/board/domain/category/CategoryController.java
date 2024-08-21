@@ -21,8 +21,9 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    // 카테고리 목록 조회
     @GetMapping("/categories")
-    public ResponseEntity<Response> getCategories(){
+    public ResponseEntity<Response> getCategories() {
 
         List<CategoryDto> categoryList = categoryService.findAllCategory();
 

@@ -30,7 +30,7 @@ public class PostService {
      */
 
     @Transactional
-    public int savePost(PostVo postVo){
+    public int savePost(PostVo postVo) {
         postMapper.savePost(postVo);
         int postId = postVo.getPostId();
 
@@ -43,11 +43,11 @@ public class PostService {
      * @return 페이징 객체
      */
 
-    public PagingResponse<PostResponseDto> findAllPostBySearch(SearchDto searchDto){
+    public PagingResponse<PostResponseDto> findAllPostBySearch(SearchDto searchDto) {
 
         // 조건에 해당하는 데이터가 없는 경우, 응답 데이터에 비어있는 리스트와 null을 담아 반환
         int count = postMapper.count(toVo(searchDto));
-        if(count < 1){
+        if(count < 1) {
             return new PagingResponse<>(Collections.emptyList(), null);
         }
 
@@ -69,9 +69,9 @@ public class PostService {
      * @return 게시글 반환dto
      */
 
-    public PostResponseDto findPostById(int postId){
+    public PostResponseDto findPostById(int postId) {
         PostVo postVo = postMapper.findPostById(postId);
-        if(postVo == null){
+        if(postVo == null) {
             throw new PostNotFoundException();
         }
         PostResponseDto result = toDto(postVo);
@@ -84,7 +84,7 @@ public class PostService {
      * @return 비밀번호
      */
 
-    public String findPostPasswordById(int postId){
+    public String findPostPasswordById(int postId) {
         String password = postMapper.findPostPasswordById(postId);
         return password;
     }
@@ -95,7 +95,7 @@ public class PostService {
      * @return 성공시 1 실패시 0
      */
 
-    public int increaseViewCountById(int postId){
+    public int increaseViewCountById(int postId) {
         int result = postMapper.increaseViewCountById(postId);
         return result;
     }
@@ -106,7 +106,7 @@ public class PostService {
      * @return 성공시 1 실패시 0
      */
 
-    public int deletePostById(int postId){
+    public int deletePostById(int postId) {
         int result = postMapper.deletePostById(postId);
         return result;
     }

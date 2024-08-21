@@ -30,11 +30,11 @@ public class PostResponseDto {
 
     /**
      * vo받아서 화면에 뿌려줄 dto변환
-     * @param postVo
-     * @return responseDto
+     * @param postVo - vo
+     * @return responseDto - dto
      */
 
-    public static PostResponseDto toDto(PostVo postVo){
+    public static PostResponseDto toDto(PostVo postVo) {
         PostResponseDto postResponseDto = PostResponseDto.builder()
                 .postId(postVo.getPostId())
                 .categoryId(postVo.getCategoryId())

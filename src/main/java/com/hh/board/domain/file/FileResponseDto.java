@@ -12,28 +12,22 @@ import lombok.NoArgsConstructor;
 public class FileResponseDto {
 
     private int fileId;
-
     private int postId;
-
     private String fileOriginalName;
-
     private String fileName;
-
     private String filePath;
-
     private long fileSize;
-
     private int status;
 
 
     /**
      * vo객체를 dto객체로
      * 다운로드용 화면에 뿌려주기 위함
-     * @param fileVo
-     * @return fileDto
+     * @param fileVo - vo
+     * @return fileDto - dto
      */
 
-    public static FileResponseDto toDto(FileVo fileVo){
+    public static FileResponseDto toDto(FileVo fileVo) {
         FileResponseDto fileResponseDto = FileResponseDto.builder()
                 .fileId(fileVo.getFileId())
                 .postId(fileVo.getPostId())

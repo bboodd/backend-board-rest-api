@@ -11,21 +11,18 @@ import java.time.LocalDateTime;
 public class CommentVo {
 
     private int commentId;
-
     private int postId;
-
     private String content;
-
     private LocalDateTime createDate;
 
     /**
      * dto를 vo로
      * db에 넣기위함
-     * @param commentRequestDto
-     * @return commentVo
+     * @param commentRequestDto - dto
+     * @return commentVo - vo
      */
 
-    public static CommentVo toVo(CommentRequestDto commentRequestDto){
+    public static CommentVo toVo(CommentRequestDto commentRequestDto) {
         CommentVo commentVo = CommentVo.builder()
                 .commentId(commentRequestDto.getCommentId())
                 .postId(commentRequestDto.getPostId())

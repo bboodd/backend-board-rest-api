@@ -26,7 +26,7 @@ public class FileController {
 
     // 파일 리스트 조회
     @GetMapping("/posts/{postId}/files")
-    public ResponseEntity<Response> getFiles(@PathVariable int postId){
+    public ResponseEntity<Response> getFiles(@PathVariable int postId) {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -35,7 +35,7 @@ public class FileController {
 
     // 첨부파일 다운로드
     @GetMapping("/posts/{postId}/files/{fileId}/download")
-    public ResponseEntity<Resource> downloadFile(@PathVariable int postId, @PathVariable int fileId){
+    public ResponseEntity<Resource> downloadFile(@PathVariable int postId, @PathVariable int fileId) {
         FileResponseDto file = fileService.findFileById(fileId);
         Resource resource = fileUtils.readFileAsResource(file);
         try {
@@ -49,6 +49,5 @@ public class FileController {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("fileName encoding failed : " + file.getFileOriginalName());
         }
-
     }
 }

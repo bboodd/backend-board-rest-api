@@ -21,7 +21,7 @@ public class CategoryService {
      * @return 카테고리 리스트
      */
 
-    public List<CategoryDto> findAllCategory(){
+    public List<CategoryDto> findAllCategory() {
         List<CategoryVo> categoryList = categoryMapper.findAllCategory();
 
         List<CategoryDto> result = categoryList.stream()

@@ -12,14 +12,9 @@ import lombok.NoArgsConstructor;
 public class FileRequestDto {
 
     int fileId;
-
     int postId;
-
     String fileOriginalName;
-
     String fileName;
-
     String filePath;
-
     long fileSize;
 }

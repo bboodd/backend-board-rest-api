@@ -30,7 +30,7 @@ public class FileUtils {
      * @param multipartFileList - 파일 객체 list
      * @return db에 저장할 파일 정보 list
      */
-    public List<FileRequestDto> uploadFiles(List<MultipartFile> multipartFileList){
+    public List<FileRequestDto> uploadFiles(List<MultipartFile> multipartFileList) {
         List<FileRequestDto> files = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFileList) {
             if(multipartFile.isEmpty()){
@@ -46,8 +46,8 @@ public class FileUtils {
      * @param multipartFile - 파일 객체
      * @return db에 저장할 파일 정보
      */
-    public FileRequestDto uploadFile(MultipartFile multipartFile){
-        if(multipartFile.isEmpty()){
+    public FileRequestDto uploadFile(MultipartFile multipartFile) {
+        if(multipartFile.isEmpty()) {
             return null;
         }
 
@@ -74,7 +74,7 @@ public class FileUtils {
      * @param originalName 원본 파일명
      * @return 디스크에 저장할 파일명
      */
-    private String generateSaveFileName(String originalName){
+    private String generateSaveFileName(String originalName) {
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
         String extension = StringUtils.getFilenameExtension(originalName);
         return uuid + "." + extension;
@@ -93,7 +93,7 @@ public class FileUtils {
      * @param addPath - 추가 경로
      * @return 업로드 경로
      */
-    private String getUploadPath(String addPath){
+    private String getUploadPath(String addPath) {
         return makeDirectories(uploadPath + File.separator + addPath);
     }
 
@@ -102,9 +102,9 @@ public class FileUtils {
      * @param filePath - 업로드 경로
      * @return 업로드 경로
      */
-    private String makeDirectories(String filePath){
+    private String makeDirectories(String filePath) {
         File dir = new File(filePath);
-        if(dir.exists() == false){
+        if(dir.exists() == false) {
             dir.mkdir();
         }
         return dir.getPath();
@@ -114,7 +114,7 @@ public class FileUtils {
      * 파일 삭제 (from disk)
      * @param files - 삭제할 파일 정보 list
      */
-    public void deleteFiles(List<FileResponseDto> files){
+    public void deleteFiles(List<FileResponseDto> files) {
         if(CollectionUtils.isEmpty(files)) {
             return;
         }
@@ -128,7 +128,7 @@ public class FileUtils {
      * @param addPath - 추가 경로
      * @param fileName - 파일명
      */
-    private void deleteFile(String addPath, String fileName){
+    private void deleteFile(String addPath, String fileName) {
         String filePath = Paths.get(uploadPath, addPath, fileName).toString();
         deleteFile(filePath);
     }
@@ -139,17 +139,22 @@ public class FileUtils {
      */
     private void deleteFile(String filePath) {
         File file = new File(filePath);
-        if(file.exists()){
+        if(file.exists()) {
             file.delete();
         }
     }
 
-    public Resource readFileAsResource(FileResponseDto file){
+    /**
+     * 파일 dto 받아서 resource 반환
+     * @param file - 파일 정보
+     * @return - Resource
+     */
+    public Resource readFileAsResource(FileResponseDto file) {
         String fileName = file.getFileName();
         Path filePath = Paths.get(uploadPath, fileName);
         try {
             Resource resource = new UrlResource(filePath.toUri());
-            if(resource.exists() == false || resource.isFile() == false){
+            if(resource.exists() == false || resource.isFile() == false) {
                 throw new RuntimeException("file not found : " + filePath.toString());
             }
             return resource;
