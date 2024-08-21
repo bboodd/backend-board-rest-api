@@ -54,6 +54,7 @@ public class PostController {
     // 게시글 저장
     @PostMapping("/posts")
     public ResponseEntity<Response> savePost(@Valid PostRequestDto postRequestDto) {
+
         int postId = postService.savePost(toVo(postRequestDto));
         List<FileRequestDto> files = fileUtils.uploadFiles(postRequestDto.getFiles());
         fileService.saveFiles(postId, files);
@@ -82,12 +83,18 @@ public class PostController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(Response.success(postId));
+                .body(Response.success(postId + "번 게시글 수정 완료"));
     }
 
+    // 게시글 삭제
     @DeleteMapping("/posts/{postId}")
-    public void deletePost(@PathVariable int postId) {
+    public ResponseEntity<Response> deletePost(@PathVariable int postId) {
 
+        postService.deletePostById(postId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Response.success(postId + "번 게시글 삭제 완료"));
     }
 
 

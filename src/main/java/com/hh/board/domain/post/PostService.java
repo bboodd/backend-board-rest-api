@@ -103,12 +103,12 @@ public class PostService {
     /**
      * 게시글 삭제
      * @param postId - id
-     * @return 성공시 1 실패시 0
+     * @return id
      */
 
     public int deletePostById(int postId) {
-        int result = postMapper.deletePostById(postId);
-        return result;
+        postMapper.deletePostById(postId);
+        return postId;
     }
 
     /**
