@@ -1,6 +1,7 @@
 package com.hh.board.domain.file;
 
 
+import com.hh.board.common.exception.FileNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -71,6 +72,9 @@ public class FileService {
 
     public FileResponseDto findFileById(int fileId) {
         FileVo fileVo = fileMapper.findFileById(fileId);
+        if(fileVo == null) {
+            throw new FileNotFoundException();
+        }
         FileResponseDto result = toDto(fileVo);
         return result;
     }

@@ -1,6 +1,7 @@
 package com.hh.board.domain.file;
 
 
+import com.hh.board.common.exception.FileNotFoundException;
 import com.hh.board.common.file.FileUtils;
 import com.hh.board.common.response.Response;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,7 @@ public class FileController {
                     .header(HttpHeaders.CONTENT_LENGTH, file.getFileSize() + "")
                     .body(resource);
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("fileName encoding failed : " + file.getFileOriginalName());
+            throw new FileNotFoundException("fileName encoding failed : " + file.getFileOriginalName());
         }
     }
 }

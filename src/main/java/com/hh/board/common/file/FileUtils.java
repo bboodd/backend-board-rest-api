@@ -1,5 +1,6 @@
 package com.hh.board.common.file;
 
+import com.hh.board.common.exception.FileNotFoundException;
 import com.hh.board.domain.file.FileRequestDto;
 import com.hh.board.domain.file.FileResponseDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +34,7 @@ public class FileUtils {
     public List<FileRequestDto> uploadFiles(List<MultipartFile> multipartFileList) {
         List<FileRequestDto> files = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFileList) {
-            if(multipartFile.isEmpty()){
+            if(multipartFile.isEmpty()) {
                 continue;
             }
             files.add(uploadFile(multipartFile));
@@ -58,7 +59,7 @@ public class FileUtils {
         try {
             multipartFile.transferTo(uploadFile);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FileNotFoundException(e.getMessage());
         }
 
         return FileRequestDto.builder()
@@ -155,11 +156,11 @@ public class FileUtils {
         try {
             Resource resource = new UrlResource(filePath.toUri());
             if(resource.exists() == false || resource.isFile() == false) {
-                throw new RuntimeException("file not found : " + filePath.toString());
+                throw new FileNotFoundException("file not found : " + filePath.toString());
             }
             return resource;
         } catch (MalformedURLException e) {
-            throw new RuntimeException("file not found : " + filePath.toString());
+            throw new FileNotFoundException("file not found : " + filePath.toString());
         }
     }
 }
