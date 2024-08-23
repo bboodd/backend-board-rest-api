@@ -19,6 +19,7 @@ import java.util.List;
 
 import static com.hh.board.domain.post.PostVo.*;
 
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
 @Slf4j
@@ -29,6 +30,7 @@ public class PostController {
     private final FileService fileService;
     private final FileUtils fileUtils;
 
+    // TODO: 컨트롤러에서는 정상 케이스만
     // 게시글 리스트 조회
     @GetMapping("/posts")
     public ResponseEntity<Response> getPosts(SearchDto searchDto) {
@@ -43,6 +45,8 @@ public class PostController {
     // 게시글 조회
     @GetMapping("/posts/{postId}")
     public ResponseEntity<Response> getPost(@PathVariable int postId) {
+
+        postService.increaseViewCountById(postId);
 
         PostResponseDto postResponseDto = postService.findPostById(postId);
 
@@ -65,8 +69,9 @@ public class PostController {
     }
 
     // 게시글 수정
+    // TODO: putmapping 변환
     @PatchMapping("/posts/{postId}")
-    public ResponseEntity<Response> updatePost(@PathVariable int postId,@Valid PostRequestDto postRequestDto) {
+    public ResponseEntity<Response> updatePost(@PathVariable int postId, @Valid PostRequestDto postRequestDto) {
 
         // 1. 게시글 정보 수정
         postService.updatePost(toVo(postRequestDto));

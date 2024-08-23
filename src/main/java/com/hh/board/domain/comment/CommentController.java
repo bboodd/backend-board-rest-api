@@ -14,6 +14,7 @@ import java.util.List;
 
 import static com.hh.board.domain.comment.CommentVo.toVo;
 
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
 @Slf4j
