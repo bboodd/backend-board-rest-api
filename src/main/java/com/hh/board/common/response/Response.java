@@ -7,6 +7,7 @@ import lombok.Getter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @AllArgsConstructor
 @Getter
+// TODO: 에러랑 성공이랑 따로 설계
 public class Response {
     private boolean success;
     private int code;

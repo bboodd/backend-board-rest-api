@@ -19,6 +19,7 @@ import java.util.List;
 
 import static com.hh.board.domain.post.PostVo.*;
 
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
 @Slf4j
@@ -29,6 +30,7 @@ public class PostController {
     private final FileService fileService;
     private final FileUtils fileUtils;
 
+    // TODO: 컨트롤러에서는 정상 케이스만
     // 게시글 리스트 조회
     @GetMapping("/posts")
     public ResponseEntity<Response> getPosts(SearchDto searchDto) {
@@ -44,6 +46,8 @@ public class PostController {
     @GetMapping("/posts/{postId}")
     public ResponseEntity<Response> getPost(@PathVariable int postId) {
 
+        postService.increaseViewCountById(postId);
+
         PostResponseDto postResponseDto = postService.findPostById(postId);
 
         return ResponseEntity
@@ -54,6 +58,7 @@ public class PostController {
     // 게시글 저장
     @PostMapping("/posts")
     public ResponseEntity<Response> savePost(@Valid PostRequestDto postRequestDto) {
+
         int postId = postService.savePost(toVo(postRequestDto));
         List<FileRequestDto> files = fileUtils.uploadFiles(postRequestDto.getFiles());
         fileService.saveFiles(postId, files);
@@ -64,8 +69,8 @@ public class PostController {
     }
 
     // 게시글 수정
-    @PatchMapping("/posts/{postId}")
-    public ResponseEntity<Response> updatePost(@PathVariable int postId,@Valid PostRequestDto postRequestDto) {
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<Response> updatePost(@PathVariable int postId, @Valid PostRequestDto postRequestDto) {
 
         // 1. 게시글 정보 수정
         postService.updatePost(toVo(postRequestDto));
@@ -82,12 +87,18 @@ public class PostController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(Response.success(postId));
+                .body(Response.success(postId + "번 게시글 수정 완료"));
     }
 
+    // 게시글 삭제
     @DeleteMapping("/posts/{postId}")
-    public void deletePost(@PathVariable int postId) {
+    public ResponseEntity<Response> deletePost(@PathVariable int postId) {
 
+        postService.deletePostById(postId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Response.success(postId + "번 게시글 삭제 완료"));
     }
 
 
