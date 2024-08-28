@@ -16,7 +16,7 @@
     </sql>
 
     <!--    파일 업로드  -->
-    <insert id="saveFile" parameterType="com.hh.board.domain.file.FileVo" useGeneratedKeys="true" keyProperty="postId">
+    <insert id="saveFile" parameterType="com.hh.board.domain.file.FileVo" useGeneratedKeys="true" keyProperty="fileId">
         INSERT INTO file(
             <include refid="fileColumns"></include>
         )
@@ -72,12 +72,12 @@
         ) VALUES
         <foreach collection="list" item="file" separator=",">
         (
-              #{fileId}
-            , #{postId}
-            , #{fileOriginalName}
-            , #{fileName}
-            , #{filePath}
-            , #{fileSize}
+              #{file.fileId}
+            , #{file.postId}
+            , #{file.fileOriginalName}
+            , #{file.fileName}
+            , #{file.filePath}
+            , #{file.fileSize}
             , 1
         )
         </foreach>

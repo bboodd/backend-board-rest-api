@@ -29,6 +29,7 @@ public class FileVo {
 
     public static FileVo toVo(FileRequestDto fileRequestDto) {
         FileVo fileVo = FileVo.builder()
+                .postId(fileRequestDto.getPostId())
                 .fileOriginalName(fileRequestDto.getFileOriginalName())
                 .fileName(fileRequestDto.getFileName())
                 .filePath(fileRequestDto.getFilePath())
