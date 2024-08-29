@@ -1,6 +1,6 @@
 package com.hh.board.common.file;
 
-import com.hh.board.common.exception.FileNotFoundException;
+import com.hh.board.common.exception.CustomException;
 import com.hh.board.domain.file.FileRequestDto;
 import com.hh.board.domain.file.FileResponseDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,7 +59,7 @@ public class FileUtils {
         try {
             multipartFile.transferTo(uploadFile);
         } catch (IOException e) {
-            throw new FileNotFoundException(e.getMessage());
+            throw new CustomException("IOException", e);
         }
 
         return FileRequestDto.builder()
@@ -156,11 +156,11 @@ public class FileUtils {
         try {
             Resource resource = new UrlResource(filePath.toUri());
             if(resource.exists() == false || resource.isFile() == false) {
-                throw new FileNotFoundException("file not found : " + filePath.toString());
+                throw new CustomException("file not found : " + filePath.toString());
             }
             return resource;
         } catch (MalformedURLException e) {
-            throw new FileNotFoundException("file not found : " + filePath.toString());
+            throw new CustomException("file not found : " + filePath.toString(), e);
         }
     }
 }

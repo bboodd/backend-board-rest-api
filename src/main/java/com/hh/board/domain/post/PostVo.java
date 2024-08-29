@@ -15,6 +15,7 @@ public class PostVo {
     private int categoryId;                 //카테고리
     private String writer;                  //작성자
     private String password;                //비밀번호
+    private String checkPassword;           //비밀번호 확인
     private String title;                   //제목
     private String content;                 //내용
     private LocalDateTime createDate;       //생성일시
@@ -41,6 +42,7 @@ public class PostVo {
                 .categoryId(postRequestDto.getCategoryId())
                 .writer(postRequestDto.getWriter())
                 .password(postRequestDto.getPassword())
+                .checkPassword(postRequestDto.getCheckPassword())
                 .title(postRequestDto.getTitle())
                 .content(postRequestDto.getContent())
                 .build();

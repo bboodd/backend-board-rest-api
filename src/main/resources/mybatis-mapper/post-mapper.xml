@@ -72,7 +72,7 @@
     </select>
 
 <!--    게시글 수 카운팅   -->
-    <select id="count" parameterType="com.hh.board.common.vo.SearchVo" resultType="int">
+    <select id="countAllPostBySearch" parameterType="com.hh.board.common.vo.SearchVo" resultType="int">
         SELECT
             COUNT(*)
         FROM

@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +30,8 @@ public class CommentController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(Response.success(commentList));
+                .body(new Response(commentList));
+
     }
 
     // 댓글 조회
@@ -42,7 +42,7 @@ public class CommentController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(Response.success(commentResponseDto));
+                .body(new Response(commentResponseDto));
     }
 
     // 댓글 등록
@@ -54,11 +54,11 @@ public class CommentController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(Response.success(commentId));
+                .body(new Response(commentId + "번 댓글 등록 완료"));
     }
 
     // 댓글 수정
-    @PatchMapping("/posts/{postId}/comments/{commentId}")
+    @PutMapping("/posts/{postId}/comments/{commentId}")
     public ResponseEntity<Response> updateComment(@PathVariable int postId, @PathVariable int commentId
                             , @RequestBody @Valid CommentRequestDto commentRequestDto) {
 
@@ -66,7 +66,7 @@ public class CommentController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(Response.success(commentId + "번 댓글 수정 완료"));
+                .body(new Response(commentId + "번 댓글 수정 완료"));
     }
 
     // 댓글 삭제
@@ -77,6 +77,6 @@ public class CommentController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(Response.success(commentId + "번 댓글 삭제 완료"));
+                .body(new Response(commentId + "번 댓글 삭제 완료"));
     }
 }

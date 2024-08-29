@@ -33,6 +33,7 @@ public class FileResponseDto {
                 .postId(fileVo.getPostId())
                 .fileName(fileVo.getFileName())
                 .fileOriginalName(fileVo.getFileOriginalName())
+                .fileSize(fileVo.getFileSize())
                 .filePath(fileVo.getFilePath())
                 .build();
         return fileResponseDto;
