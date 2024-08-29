@@ -2,6 +2,7 @@ package com.hh.board.domain.post;
 
 
 import com.hh.board.common.dto.SearchDto;
+import com.hh.board.common.exception.PostErrorCode;
 import com.hh.board.common.file.FileUtils;
 import com.hh.board.common.paging.Pagination;
 import com.hh.board.common.paging.PagingResponse;
@@ -12,6 +13,7 @@ import com.hh.board.domain.file.FileResponseDto;
 import com.hh.board.domain.file.FileService;
 import com.hh.board.domain.file.FileVo;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -76,23 +78,11 @@ public class PostController {
                 .body(new Response(postResponseDto));
     }
 
-    private void fileUploadAndSave(int postId, List<MultipartFile> files) {
-        if(!CollectionUtils.isEmpty(files)) {
-            List<FileRequestDto> uploadFiles = fileUtils.uploadFiles(files);
-
-            List<FileVo> fileVoList = new ArrayList<>();
-            uploadFiles.stream().forEach(f -> {
-                f.setPostId(postId);
-                fileVoList.add(toVo(f));
-            });
-
-            fileService.saveFiles(fileVoList);
-        }
-    }
-
     // 게시글 저장
     @PostMapping("/posts")
     public ResponseEntity<Response> savePost(@Valid PostRequestDto postRequestDto) {
+
+        validation(postRequestDto);
 
         int postId = postService.savePost(PostVo.toVo(postRequestDto));
 
@@ -110,6 +100,8 @@ public class PostController {
     @PutMapping("/posts/{postId}")
 
     public ResponseEntity<Response> updatePost(@PathVariable int postId, @Valid PostRequestDto postRequestDto) {
+
+        validation(postRequestDto);
 
         // 게시글 정보 수정
         postService.updatePost(PostVo.toVo(postRequestDto));
@@ -142,6 +134,64 @@ public class PostController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new Response(postId + "번 게시글 삭제 완료"));
+    }
+
+    // 비밀번호 체크
+    @PostMapping("/posts/{postId}/")
+    public ResponseEntity<Response> checkPassword(@PathVariable int postId, @NotBlank String inputPassword) {
+        String savedPassword = postService.findPostPasswordById(postId);
+
+        if(!inputPassword.equals(savedPassword)) {
+            throw PostErrorCode.PASSWORD_CHECK_ERROR.defaultException();
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new Response("비밀번호 일치"));
+    }
+
+
+    /**
+     * multipart 리스트를 업로드와 저장
+     * @param postId - id
+     * @param files - multipart list
+     */
+    private void fileUploadAndSave(int postId, List<MultipartFile> files) {
+        if(!CollectionUtils.isEmpty(files)) {
+            List<FileRequestDto> uploadFiles = fileUtils.uploadFiles(files);
+
+            List<FileVo> fileVoList = new ArrayList<>();
+            uploadFiles.stream().forEach(f -> {
+                f.setPostId(postId);
+                fileVoList.add(toVo(f));
+            });
+
+            fileService.saveFiles(fileVoList);
+        }
+    }
+
+    /**
+     * 게시물 등록 및 수정시 비밀번호와 비밀번호 확인 검증
+     * @param postRequestDto - request
+     * @return - true
+     */
+    private boolean validation(PostRequestDto postRequestDto) {
+        //게시물 등록및 수정시
+        String inputPassword = postRequestDto.getPassword();
+        String checkPassword = postRequestDto.getCheckPassword();
+        if(!inputPassword.equals(checkPassword)) {
+            throw PostErrorCode.PASSWORD_CHECK_ERROR.defaultException();
+        }
+
+        //게시물 수정시
+        if(postRequestDto.getPostId() != 0) {
+            int postId = postRequestDto.getPostId();
+            String savedPassword = postService.findPostPasswordById(postId);
+            if(!inputPassword.equals(savedPassword)) {
+                throw PostErrorCode.PASSWORD_CHECK_ERROR.defaultException();
+            }
+        }
+        return true;
     }
 
 
