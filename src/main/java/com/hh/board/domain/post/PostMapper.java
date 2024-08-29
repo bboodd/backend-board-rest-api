@@ -27,7 +27,7 @@ public interface PostMapper {
      * @param searchVo - 검색조건
      * @return - many
      */
-    int count(SearchVo searchVo);
+    int countAllPostBySearch(SearchVo searchVo);
 
     /**
      * 게시글 조회

@@ -1,7 +1,7 @@
 package com.hh.board.domain.file;
 
 
-import com.hh.board.common.exception.FileNotFoundException;
+import com.hh.board.common.exception.FileErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,20 +22,13 @@ public class FileService {
 
     /**
      * 파일 다중 등록
-     * @param postId - 게시글 번호
-     * @param files - 파일 정보 list
+     * @param fileVoList - 파일 정보 list
      */
     @Transactional
-    public void saveFiles(int postId, List<FileRequestDto> files) {
-        if(CollectionUtils.isEmpty(files)) {
+    public void saveFiles(List<FileVo> fileVoList) {
+        if(CollectionUtils.isEmpty(fileVoList)) {
             return;
         }
-        for(FileRequestDto file : files) {
-            file.setPostId(postId);
-        }
-        List<FileVo> fileVoList = files.stream()
-                .map(FileVo::toVo).collect(toList());
-
         fileMapper.saveAllFile(fileVoList);
     }
 
@@ -73,7 +66,7 @@ public class FileService {
     public FileResponseDto findFileById(int fileId) {
         FileVo fileVo = fileMapper.findFileById(fileId);
         if(fileVo == null) {
-            throw new FileNotFoundException();
+            throw FileErrorCode.FILE_NOT_FOUND.defaultException();
         }
         FileResponseDto result = toDto(fileVo);
         return result;
@@ -96,9 +89,6 @@ public class FileService {
      * @return - file list
      */
     public List<FileResponseDto> findAllFileByIds(List<Integer> ids) {
-        if(CollectionUtils.isEmpty(ids)) {
-            return Collections.emptyList();
-        }
         List<FileVo> fileVoList = fileMapper.findAllFileByIds(ids);
         return fileVoList.stream().map(FileResponseDto::toDto).collect(toList());
     }
@@ -108,10 +98,7 @@ public class FileService {
      * 파일 삭제
      * @param ids - id list
      */
-    public void deleteAllFileByIds(List<Integer> ids){
-        if(CollectionUtils.isEmpty(ids)) {
-            return;
-        }
+    public void deleteAllFileByIds(List<Integer> ids) {
         fileMapper.deleteAllFileByIds(ids);
     }
 }
