@@ -76,13 +76,7 @@ public class PostController {
                 .body(new Response(postResponseDto));
     }
 
-    // 게시글 저장
-    @PostMapping("/posts")
-    public ResponseEntity<Response> savePost(@Valid PostRequestDto postRequestDto) {
-
-        int postId = postService.savePost(PostVo.toVo(postRequestDto));
-
-        List<MultipartFile> files = postRequestDto.getFiles();
+    private void fileUploadAndSave(int postId, List<MultipartFile> files) {
         if(!CollectionUtils.isEmpty(files)) {
             List<FileRequestDto> uploadFiles = fileUtils.uploadFiles(files);
 
@@ -94,6 +88,17 @@ public class PostController {
 
             fileService.saveFiles(fileVoList);
         }
+    }
+
+    // 게시글 저장
+    @PostMapping("/posts")
+    public ResponseEntity<Response> savePost(@Valid PostRequestDto postRequestDto) {
+
+        int postId = postService.savePost(PostVo.toVo(postRequestDto));
+
+        // 파일 업로드 및 저장
+        List<MultipartFile> files = postRequestDto.getFiles();
+        fileUploadAndSave(postId, files);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -104,31 +109,20 @@ public class PostController {
     @PutMapping("/posts/{postId}")
     public ResponseEntity<Response> updatePost(@PathVariable int postId, @Valid PostRequestDto postRequestDto) {
 
-        // 1. 게시글 정보 수정
+        // 게시글 정보 수정
         postService.updatePost(PostVo.toVo(postRequestDto));
 
+        // 파일 업로드 및 저장
         List<MultipartFile> files = postRequestDto.getFiles();
-        if(!CollectionUtils.isEmpty(files)) {
-            // 2. 파일 업로드 (to disk)
-            List<FileRequestDto> uploadFiles = fileUtils.uploadFiles(files);
-
-            List<FileVo> fileVoList = new ArrayList<>();
-            uploadFiles.stream().forEach(f -> {
-                f.setPostId(postId);
-                fileVoList.add(toVo(f));
-            });
-
-            // 3. 파일 정보 저장 (to database)
-            fileService.saveFiles(fileVoList);
-        }
+        fileUploadAndSave(postId, files);
 
         List<Integer> removeFileIds = postRequestDto.getRemoveFileIds();
         if(!CollectionUtils.isEmpty(removeFileIds)) {
-            // 4. 삭제할 파일 정보 조회 (from database)
+            // 삭제할 파일 정보 조회 (from database)
             List<FileResponseDto> deleteFiles = fileService.findAllFileByIds(removeFileIds);
-            // 5. 파일 삭제 (from disk)
+            // 파일 삭제 (from disk)
             fileUtils.deleteFiles(deleteFiles);
-            // 6. 파일 삭제 (from database)
+            // 파일 삭제 (from database)
             fileService.deleteAllFileByIds(removeFileIds);
         }
 
