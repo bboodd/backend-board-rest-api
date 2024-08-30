@@ -22,6 +22,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -137,11 +138,13 @@ public class PostController {
     }
 
     // 비밀번호 체크
-    @PostMapping("/posts/{postId}/")
-    public ResponseEntity<Response> checkPassword(@PathVariable int postId, @NotBlank String inputPassword) {
+    @PostMapping("/posts/{postId}/password")
+    public ResponseEntity<Response> checkPassword(@PathVariable int postId, @NotBlank @RequestBody String inputPassword) {
         String savedPassword = postService.findPostPasswordById(postId);
 
-        if(!inputPassword.equals(savedPassword)) {
+        String decodePassword = URLDecoder.decode(inputPassword.substring(0, inputPassword.length()-1));
+
+        if(!decodePassword.equals(savedPassword)) {
             throw PostErrorCode.PASSWORD_CHECK_ERROR.defaultException();
         }
 
