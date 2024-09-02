@@ -7,7 +7,7 @@ import com.hh.board.common.file.FileUtils;
 import com.hh.board.common.paging.Pagination;
 import com.hh.board.common.paging.PagingResponse;
 import com.hh.board.common.response.Response;
-import com.hh.board.common.vo.SearchVo;
+import com.hh.board.docs.PostControllerDocs;
 import com.hh.board.domain.file.FileRequestDto;
 import com.hh.board.domain.file.FileResponseDto;
 import com.hh.board.domain.file.FileService;
@@ -22,20 +22,20 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static com.hh.board.common.vo.SearchVo.toVo;
 import static com.hh.board.domain.file.FileVo.toVo;
-import static com.hh.board.domain.post.PostVo.*;
 
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
 @Slf4j
 @RequestMapping("/api-board")
-public class PostController {
+public class PostController implements PostControllerDocs {
 
     private final PostService postService;
     private final FileService fileService;
@@ -137,11 +137,13 @@ public class PostController {
     }
 
     // 비밀번호 체크
-    @PostMapping("/posts/{postId}/")
-    public ResponseEntity<Response> checkPassword(@PathVariable int postId, @NotBlank String inputPassword) {
+    @PostMapping("/posts/{postId}/password")
+    public ResponseEntity<Response> checkPassword(@PathVariable int postId, @NotBlank @RequestBody String inputPassword) {
         String savedPassword = postService.findPostPasswordById(postId);
 
-        if(!inputPassword.equals(savedPassword)) {
+        String decodePassword = URLDecoder.decode(inputPassword.substring(0, inputPassword.length()-1));
+
+        if(!decodePassword.equals(savedPassword)) {
             throw PostErrorCode.PASSWORD_CHECK_ERROR.defaultException();
         }
 

@@ -9,3 +9,7 @@ docker-compose up -d
 database
 
 ![img.png](db.png)
+
+swagger
+
+![img.png](swagger.png)
