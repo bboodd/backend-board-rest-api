@@ -1,5 +1,6 @@
 package com.hh.board.docs;
 
+import com.hh.board.common.dto.PasswordRequestDto;
 import com.hh.board.common.dto.SearchDto;
 import com.hh.board.common.exception.ErrorCode;
 import com.hh.board.common.exception.PostErrorCode;
@@ -16,7 +17,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "posts", description = "게시글 API")
 public interface PostControllerDocs {
@@ -97,5 +102,5 @@ public interface PostControllerDocs {
             @Parameter(name = "postId", description = "게시글 아이디"),
             @Parameter(name = "inputPassword", description = "비밀번호 입력")
     })
-    public ResponseEntity<Response> checkPassword(int postId, String inputPassword);
+    ResponseEntity<Response> checkPassword(@PathVariable int postId, @RequestBody PasswordRequestDto passwordRequestDto);
 }
