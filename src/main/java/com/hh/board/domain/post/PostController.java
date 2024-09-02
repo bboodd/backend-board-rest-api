@@ -7,7 +7,7 @@ import com.hh.board.common.file.FileUtils;
 import com.hh.board.common.paging.Pagination;
 import com.hh.board.common.paging.PagingResponse;
 import com.hh.board.common.response.Response;
-import com.hh.board.common.vo.SearchVo;
+import com.hh.board.docs.PostControllerDocs;
 import com.hh.board.domain.file.FileRequestDto;
 import com.hh.board.domain.file.FileResponseDto;
 import com.hh.board.domain.file.FileService;
@@ -29,14 +29,13 @@ import java.util.List;
 
 import static com.hh.board.common.vo.SearchVo.toVo;
 import static com.hh.board.domain.file.FileVo.toVo;
-import static com.hh.board.domain.post.PostVo.*;
 
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
 @Slf4j
 @RequestMapping("/api-board")
-public class PostController {
+public class PostController implements PostControllerDocs {
 
     private final PostService postService;
     private final FileService fileService;

@@ -2,6 +2,7 @@ package com.hh.board.domain.comment;
 
 
 import com.hh.board.common.response.Response;
+import com.hh.board.docs.CommentControllerDocs;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,7 @@ import static com.hh.board.domain.comment.CommentVo.toVo;
 @RestController
 @Slf4j
 @RequestMapping("/api-board")
-public class CommentController {
+public class CommentController implements CommentControllerDocs {
 
     private final CommentService commentService;
 

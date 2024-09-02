@@ -4,6 +4,7 @@ package com.hh.board.domain.file;
 import com.hh.board.common.exception.CustomException;
 import com.hh.board.common.file.FileUtils;
 import com.hh.board.common.response.Response;
+import com.hh.board.docs.FileControllerDocs;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -22,7 +23,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/api-board")
-public class FileController {
+public class FileController implements FileControllerDocs {
 
     private final FileService fileService;
     private final FileUtils fileUtils;
