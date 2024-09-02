@@ -1,6 +1,7 @@
 package com.hh.board.domain.post;
 
 
+import com.hh.board.common.dto.PasswordRequestDto;
 import com.hh.board.common.dto.SearchDto;
 import com.hh.board.common.exception.PostErrorCode;
 import com.hh.board.common.file.FileUtils;
@@ -138,12 +139,16 @@ public class PostController implements PostControllerDocs {
 
     // 비밀번호 체크
     @PostMapping("/posts/{postId}/password")
-    public ResponseEntity<Response> checkPassword(@PathVariable int postId, @NotBlank @RequestBody String inputPassword) {
+    public ResponseEntity<Response> checkPassword(@PathVariable int postId, @RequestBody PasswordRequestDto passwordRequestDto) {
+
+        String inputPassword = passwordRequestDto.getInputPassword();
+
+        log.info("input = " + inputPassword);
         String savedPassword = postService.findPostPasswordById(postId);
 
-        String decodePassword = URLDecoder.decode(inputPassword.substring(0, inputPassword.length()-1));
+//        String decodePassword = URLDecoder.decode(inputPassword.substring(0, inputPassword.length()-1));
 
-        if(!decodePassword.equals(savedPassword)) {
+        if(!inputPassword.equals(savedPassword)) {
             throw PostErrorCode.PASSWORD_CHECK_ERROR.defaultException();
         }
 
